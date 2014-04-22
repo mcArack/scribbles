@@ -1,1 +1,50 @@
-../../OneLinersUseful4Troubleshooting.txt
+One Liners:
+
+Apache:
+
+# Show the count of error types in error.log
+#
+# E.g sed -e "s/\[.*\]\([^:]*\)\(.*\)/\1/" error.log | sort | uniq -cd
+#      2  Apache/2.2.22 (Ubuntu) mod_ssl/2.2.22 OpenSSL/1.0.1 configured -- resuming normal operations
+#      2  client sent HTTP/1.1 request without hostname (see RFC2616 section 14.23)
+#     10  File does not exist
+#      4  Invalid method in request \x16\x03\x01
+#   5904  PHP Fatal error
+#  72611  PHP Notice
+#    155  PHP Warning
+#     53  script not found or unable to stat
+#
+
+sed -e "s/\[.*\]\([^:]*\)\(.*\)/\1/" error.log | sort | uniq -cd
+
+# Show only the VirtualHost contents
+
+gawk -vIGNORECASE=1 '/<VirtualHost /,/<\/VirtualHost>/'
+
+# How to grep httpd -S:
+
+httpd -S 2>&1 | grep
+
+Files:
+
+# Remove the comments and whitespace when grepping a file
+
+egrep -v "(^#.*|^$)"
+egrep -v '^(#|$)'
+grep "^[^#]"
+
+# To find the largest 10 files (linux/bash):
+
+find . -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+
+# To find the largest 10 directories:
+
+find . -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+
+#  Plesk
+#
+#  Remake the Plesk config files from their DB
+
+/usr/local/psa/admin/sbin/httpdmng --reconfigure-all
+
+
